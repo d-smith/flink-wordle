@@ -22,6 +22,7 @@ import org.apache.flink.api.common.functions.FilterFunction;
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.operators.Order;
+import org.apache.flink.api.common.typeinfo.Types;
 import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.aggregation.Aggregations;
@@ -29,17 +30,8 @@ import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.util.Collector;
 
-/**
- * Skeleton for a Flink Batch Job.
- *
- * <p>For a tutorial how to write a Flink batch application, check the
- * tutorials and examples on the <a href="https://flink.apache.org/docs/stable/">Flink Website</a>.
- *
- * <p>To package your application into a JAR file for execution,
- * change the main class in the POM.xml file to this class (simply search for 'mainClass')
- * and run 'mvn clean package' on the command line.
- */
-public class BatchJob {
+
+public class FiveLetterWordFreq {
 
 	public static void main(String[] args) throws Exception {
 		// set up the batch execution environment
@@ -54,35 +46,16 @@ public class BatchJob {
 		DataSet<String> text = env.readTextFile(params.get("wordfile"));
 
 		DataSet<Tuple2<Character,Integer>> counts =
-				text.map(new MapFunction<String, String>() {
-					@Override
-					public String map(String s) throws Exception {
-						return s.replaceAll("\\p{Punct}", "");
-					}
-				})
-				.filter(new FilterFunction<String>() {
-					@Override
-					public boolean filter(String s) throws Exception {
-						return s.length() == 5;
-					}
-				})
-				.filter(new FilterFunction<String>() {
-					@Override
-					public boolean filter(String s) throws Exception {
-						return Character.isLowerCase(s.charAt(0));
-					}
-				})
-				.flatMap(new FlatMapFunction<String, Tuple2<Character,Integer>>() {
-
-
-
-					@Override
-					public void flatMap(String s, Collector<Tuple2<Character,Integer>> collector) throws Exception {
+				text
+						.map(s -> s.replaceAll("\\p{Punct}", ""))
+				.filter(s -> s.length() == 5)
+				.filter(s -> Character.isLowerCase(s.charAt(0)))
+				.flatMap((String s, Collector<Tuple2<Character,Integer>> collector) ->{
 						for(int i=0;i<s.length();i++) {
 							collector.collect(Tuple2.of(s.charAt(i),1));
 						}
 					}
-				})
+				).returns(Types.TUPLE(Types.CHAR,Types.INT))
 				.groupBy(0)
 				.aggregate(Aggregations.SUM,1);
 
