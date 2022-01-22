@@ -1,5 +1,7 @@
 # flink-wordle
 
-Simple example of taking a set of words and doing letter
-frequency analysis for having some insight into seed word
-selection for solving Wordle puzzles.
+Messing around with wordle...
+
+* Initial start - use letter frequency to score words
+* Increase scrore for vowels, penalty for duplicate letters (more info gain?)
+* Next - factor in word frequency, maybe... not sure if puzzle word choice is random

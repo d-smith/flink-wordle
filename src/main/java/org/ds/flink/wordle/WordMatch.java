@@ -9,14 +9,12 @@ import org.apache.flink.api.java.aggregation.Aggregations;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.util.Collector;
-import scala.Char;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-public class FiveLetterWordScore {
+public class WordMatch {
     private static Map<Character, Integer> charWeights=
             Map.ofEntries(
                 Map.entry('e',6892),
@@ -47,9 +45,18 @@ public class FiveLetterWordScore {
                 Map.entry('q',128)
             );
 
-    public static boolean isVowel(char c) {
-        String vowels = "aeiou"; //ascii only, lower case
-        return vowels.indexOf(c) >= 0;
+
+    private static boolean doesNotHave(String s, char... chars) {
+        for(char c: chars) {
+            if(s.indexOf(c) != -1) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static boolean has(String s, char c) {
+        return s.indexOf(c) >= 0;
     }
 
     public static void main(String[] args) throws Exception {
@@ -67,6 +74,12 @@ public class FiveLetterWordScore {
                 .map(s -> s.replaceAll("\\p{Punct}", ""))
                 .filter(s -> s.length() == 5)
                 .filter(s -> Character.isLowerCase(s.charAt(0)))
+                .filter(s-> has(s,'i')
+                    && has(s,'n')
+                    && has(s,'e')
+                        && doesNotHave(s, 't','r','l','s','m','a','h','g')
+                        && s.indexOf('i') == 1 && s.indexOf('n')  == 2 && s.indexOf('e') == 4
+                  )
                 .flatMap(new FlatMapFunction<String, Tuple2<String,Integer>>() {
                     @Override
                     public void flatMap(String s, Collector<Tuple2<String, Integer>> collector) throws Exception {
@@ -74,18 +87,9 @@ public class FiveLetterWordScore {
                         try {
 
                             int score = 0;
-                            List<Character> previous = new ArrayList<>();
                             for (int i = 0; i < s.length(); i++) {
-                                char c = s.charAt(i);
-                                int letterScore = charWeights.get(c);
-
-                                if(!previous.contains(c)) {
-                                    score += letterScore;
-                                    if(isVowel(c)) {
-                                        score += 2 * letterScore;
-                                    }
-                                }
-                                previous.add(c);
+                                int letterScore = charWeights.get(s.charAt(i));
+                                score += letterScore;
                             }
 
                             collector.collect(Tuple2.of(s, score));
