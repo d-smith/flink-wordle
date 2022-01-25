@@ -84,11 +84,12 @@ public class Word2Match {
                 })
                 .returns(Types.TUPLE(Types.STRING,Types.STRING))
                 .filter(t2-> {
+
                     String s = t2.f0;
-                    return s.charAt(1) == 'r' &&
-                            s.charAt(2) == 'i' &&
-                            has(s,'p') &&
-                            doesNotHave(s, 'a','o','s','e','f','u','t','b','n','g','d','l','v','y');
+                    return s.charAt(1) == 'n' &&
+                            has(s,'o') &&
+                            doesNotHave(s, 'i','t','r');
+
 
                 })
                 .flatMap(new FlatMapFunction<Tuple2<String, String>, Tuple3<String,String,Integer>>() {
@@ -118,7 +119,7 @@ public class Word2Match {
                     }
                 });
 
-        DataSet<Tuple3<String,String,Integer>> sorted = counts.sortPartition(2, Order.DESCENDING).setParallelism(1);
+        DataSet<Tuple3<String,String,Integer>> sorted = counts.sortPartition(1, Order.ASCENDING).setParallelism(1);
         sorted.print();
 
 

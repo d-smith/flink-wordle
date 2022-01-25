@@ -82,7 +82,7 @@ public class FiveLetterWordScore {
                                 if(!previous.contains(c)) {
                                     score += letterScore;
                                     if(isVowel(c)) {
-                                        score += 2 * letterScore;
+                                        score += letterScore;
                                     }
                                 }
                                 previous.add(c);

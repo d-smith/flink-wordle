@@ -74,10 +74,10 @@ public class WordMatch {
                 .map(s -> s.replaceAll("\\p{Punct}", ""))
                 .filter(s -> s.length() == 5)
                 .filter(s -> Character.isLowerCase(s.charAt(0)))
-                .filter(s-> s.charAt(1) == 'r' &&
-                        s.charAt(2) == 'i' &&
-                        has(s,'p') &&
-                        doesNotHave(s, 'a','o','s','e','f','u','t','b','n','g','d','l','v','y')
+                .filter(s-> s.charAt(1) == 'n' &&
+                        s.charAt(0) == 'k' && s.charAt(2) == 'o' &&
+                        //has(s,'o') &&
+                        doesNotHave(s, 'i','t','r','b','s','w','n')
                   )
                 .flatMap(new FlatMapFunction<String, Tuple2<String,Integer>>() {
                     @Override
