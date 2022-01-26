@@ -9,6 +9,7 @@ import org.apache.flink.api.java.aggregation.Aggregations;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.util.Collector;
+import org.ds.flink.wordle.wordfilters.WordFilter;
 
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -74,11 +75,7 @@ public class WordMatch {
                 .map(s -> s.replaceAll("\\p{Punct}", ""))
                 .filter(s -> s.length() == 5)
                 .filter(s -> Character.isLowerCase(s.charAt(0)))
-                .filter(s-> s.charAt(1) == 'n' &&
-                        s.charAt(0) == 'k' && s.charAt(2) == 'o' &&
-                        //has(s,'o') &&
-                        doesNotHave(s, 'i','t','r','b','s','w','n')
-                  )
+                .filter(new WordFilter())
                 .flatMap(new FlatMapFunction<String, Tuple2<String,Integer>>() {
                     @Override
                     public void flatMap(String s, Collector<Tuple2<String, Integer>> collector) throws Exception {

@@ -11,6 +11,7 @@ import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.util.Collector;
+import org.ds.flink.wordle.wordfilters.WordFilter2;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,15 +84,7 @@ public class Word2Match {
                     return Tuple2.of(parts[0], parts[2]);
                 })
                 .returns(Types.TUPLE(Types.STRING,Types.STRING))
-                .filter(t2-> {
-
-                    String s = t2.f0;
-                    return s.charAt(1) == 'n' &&
-                            has(s,'o') &&
-                            doesNotHave(s, 'i','t','r');
-
-
-                })
+                .filter(new WordFilter2())
                 .flatMap(new FlatMapFunction<Tuple2<String, String>, Tuple3<String,String,Integer>>() {
                     @Override
                     public void flatMap(Tuple2<String, String> t2, Collector<Tuple3<String, String, Integer>> collector) throws Exception {

@@ -5,9 +5,10 @@ import org.apache.flink.api.java.tuple.Tuple2;
 
 import static org.ds.flink.wordle.wordfilters.WorkFilterFunc.match;
 
-public class WordFilter2 implements FilterFunction<Tuple2<String,String>> {
+public class WordFilter implements FilterFunction<String> {
+
     @Override
-    public boolean filter(Tuple2<String, String> t2) throws Exception {
-        return match(t2.f0);
+    public boolean filter(String s) throws Exception {
+        return match(s);
     }
 }
