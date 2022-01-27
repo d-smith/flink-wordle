@@ -14,15 +14,24 @@ public class WorkFilterFunc {
         return s.indexOf(c) >= 0;
     }
 
+    private static boolean noDuplicateChars(String s) {
+        for(int i=0; i< s.length();i++) {
+            char c = s.charAt(i);
+            if (s.indexOf(c) != s.lastIndexOf(c)) return false;
+        }
+        return true;
+    }
+
     public static boolean match(String s) {
         if(s.length() != 5) {
             return false;
         }
 
-        return
-                s.charAt(4) == 'r' &&
-                        s.charAt(0) == 's' &&
-                        s.charAt(3) == 'a';// &&
-                        //doesNotHave(s,'i','t','e','n','o','l');
+        return //noDuplicateChars(s);
+                s.charAt(2) == 'a' &&
+                        s.charAt(3) == 'c' &&
+                        s.charAt(4) == 'k' &&
+
+                        doesNotHave(s,'y','e','r','s','p','i','n','o','b','l');
     }
 }

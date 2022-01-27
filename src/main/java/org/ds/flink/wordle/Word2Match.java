@@ -78,7 +78,7 @@ public class Word2Match {
 
         DataSet<String> text = env.readTextFile(params.get("wordfile"));
 
-        DataSet<Tuple3<String,String,Integer>> counts = text
+        DataSet<Tuple3<String,Integer,Integer>> counts = text
                 .map(s-> {
                     String[] parts = s.split(" ");
                     return Tuple2.of(parts[0], parts[2]);
@@ -110,9 +110,11 @@ public class Word2Match {
                             System.err.println("EXCEPTION PROCESSING " + t2);
                         }
                     }
-                });
+                })
+                .map(t3 -> Tuple3.of(t3.f0, Integer.parseInt(t3.f1), t3.f2))
+                .returns(Types.TUPLE(Types.STRING, Types.INT,Types.INT));
 
-        DataSet<Tuple3<String,String,Integer>> sorted = counts.sortPartition(1, Order.ASCENDING).setParallelism(1);
+        DataSet<Tuple3<String,Integer,Integer>> sorted = counts.sortPartition(1, Order.ASCENDING).setParallelism(1);
         sorted.print();
 
 

@@ -97,7 +97,7 @@ public class WordMatch {
                 .groupBy(0)
                 .aggregate(Aggregations.SUM,1);
 
-        DataSet<Tuple2<String,Integer>> sorted = counts.sortPartition(1, Order.DESCENDING).setParallelism(1);
+        DataSet<Tuple2<String,Integer>> sorted = counts.sortPartition(1, Order.ASCENDING).setParallelism(1);
         sorted.print();
     }
 }
