@@ -9,6 +9,7 @@ import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.aggregation.Aggregations;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.tuple.Tuple3;
+import org.apache.flink.api.java.tuple.Tuple4;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.util.Collector;
 import org.ds.flink.wordle.wordfilters.WordFilter2;
@@ -78,7 +79,7 @@ public class Word2Match {
 
         DataSet<String> text = env.readTextFile(params.get("wordfile"));
 
-        DataSet<Tuple3<String,Integer,Integer>> counts = text
+        DataSet<Tuple4<String,Integer,Integer,Integer>> counts = text
                 .map(s-> {
                     String[] parts = s.split(" ");
                     return Tuple2.of(parts[0], parts[2]);
@@ -112,9 +113,11 @@ public class Word2Match {
                     }
                 })
                 .map(t3 -> Tuple3.of(t3.f0, Integer.parseInt(t3.f1), t3.f2))
-                .returns(Types.TUPLE(Types.STRING, Types.INT,Types.INT));
+                .returns(Types.TUPLE(Types.STRING, Types.INT,Types.INT))
+                .map(t3 -> Tuple4.of(t3.f0, t3.f1, t3.f2,t3.f1 + 13* t3.f2))
+                .returns(Types.TUPLE(Types.STRING, Types.INT,Types.INT,Types.INT));
 
-        DataSet<Tuple3<String,Integer,Integer>> sorted = counts.sortPartition(1, Order.ASCENDING).setParallelism(1);
+        DataSet<Tuple4<String,Integer,Integer,Integer>> sorted = counts.sortPartition(1, Order.ASCENDING).setParallelism(1);
         sorted.print();
 
 
