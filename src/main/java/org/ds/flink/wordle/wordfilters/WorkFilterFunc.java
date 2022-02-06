@@ -27,11 +27,10 @@ public class WorkFilterFunc {
             return false;
         }
 
-        return //noDuplicateChars(s);
-                s.charAt(2) == 'a' &&
-                        s.charAt(3) == 'c' &&
-                        s.charAt(4) == 'k' &&
-
-                        doesNotHave(s,'y','e','r','s','p','i','n','o','b','l');
+        return
+                //noDuplicateChars(s) &&
+                        s.charAt(0) == 's' &&
+                                s.charAt(1) != 'l' && has(s,'l') &&
+                        doesNotHave(s,'a','r','o','e','u','n', 't','m','y');
     }
 }

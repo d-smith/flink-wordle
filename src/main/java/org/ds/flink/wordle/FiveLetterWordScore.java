@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 public class FiveLetterWordScore {
-    private static Map<Character, Integer> charWeights=
+    private static Map<Character, Integer> charWeightsOrig=
             Map.ofEntries(
                 Map.entry('e',6892),
                 Map.entry('a',6758),
@@ -45,6 +45,36 @@ public class FiveLetterWordScore {
                 Map.entry('x',333),
                 Map.entry('j',286),
                 Map.entry('q',128)
+            );
+
+    private static Map<Character, Integer> charWeights=
+            Map.ofEntries(
+                    Map.entry('s',6665),
+                    Map.entry('e',6662),
+                    Map.entry('a',5990),
+                    Map.entry('o',4438),
+                    Map.entry('r',4158),
+                    Map.entry('i',3759),
+                    Map.entry('l',3371),
+                    Map.entry('t',3295),
+                    Map.entry('n',2952),
+                    Map.entry('u',2511),
+                    Map.entry('d',2453),
+                    Map.entry('y',2074),
+                    Map.entry('c',2028),
+                    Map.entry('p',2019),
+                    Map.entry('m',1976),
+                    Map.entry('h',1760),
+                    Map.entry('g',1644),
+                    Map.entry('b',1627),
+                    Map.entry('k',1505),
+                    Map.entry('f',1115),
+                    Map.entry('w',1039),
+                    Map.entry('v',694),
+                    Map.entry('z',434),
+                    Map.entry('j',291),
+                    Map.entry('x',288),
+                    Map.entry('q',112)
             );
 
     public static boolean isVowel(char c) {
