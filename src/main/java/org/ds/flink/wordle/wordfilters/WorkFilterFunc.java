@@ -22,15 +22,22 @@ public class WorkFilterFunc {
         return true;
     }
 
+    private static boolean charNotAt(String s, char c, int... indices) {
+        for(int i: indices) {
+            if(s.charAt(i) == c) return false;
+        }
+        return true;
+    }
+
     public static boolean match(String s) {
         if(s.length() != 5) {
             return false;
         }
 
         return
-                //noDuplicateChars(s) &&
-                        s.charAt(0) == 's' &&
-                                s.charAt(1) != 'l' && has(s,'l') &&
-                        doesNotHave(s,'a','r','o','e','u','n', 't','m','y');
+                noDuplicateChars(s) &&
+                        charNotAt(s,'r',1,3,0) &&
+                        charNotAt(s,'o',2,4,1) &&
+                        doesNotHave(s, 'a','s','e','i','n','t','w','d','y');
     }
 }
