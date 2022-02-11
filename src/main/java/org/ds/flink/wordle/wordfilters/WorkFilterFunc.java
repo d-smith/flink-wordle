@@ -29,6 +29,19 @@ public class WorkFilterFunc {
         return true;
     }
 
+    public static boolean hasAt(String s, char c, int i) {
+        return s.charAt(i) == c;
+    }
+
+    public static boolean hasButNotAt(String s, char c, int... indices) {
+        if(charNotAt(s,c,indices) == false) {
+            return false;
+        }
+
+        return has(s,c);
+
+    }
+
     public static boolean match(String s) {
         if(s.length() != 5) {
             return false;
@@ -36,8 +49,9 @@ public class WorkFilterFunc {
 
         return
                 noDuplicateChars(s) &&
-                        charNotAt(s,'r',1,3,0) &&
-                        charNotAt(s,'o',2,4,1) &&
-                        doesNotHave(s, 'a','s','e','i','n','t','w','d','y');
+                        hasButNotAt(s,'l',0) &&
+                        hasAt(s,'e',3) &&
+                        hasAt(s,'r',4) &&
+                        doesNotHave(s, 'a','o','s','i','t');
     }
 }
